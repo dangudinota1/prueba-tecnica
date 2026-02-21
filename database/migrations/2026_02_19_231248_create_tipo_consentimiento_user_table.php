@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('tipo_consentimiento_user', function (Blueprint $table) {
+            $table->id();
+
+            $table->string('identificador', 30)->unique();
+
+            $table->foreignId('user_id')
+                  ->constrained()
+                  ->cascadeOnDelete();
+
+            $table->foreignId('tipo_consentimiento_id')
+                  ->constrained('tipos_consentimientos')
+                  ->cascadeOnDelete();
+
+            $table->boolean('seleccion')->default(false);
+            $table->boolean('estatus')->default(true);
+
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('tipo_consentimiento_user');
+    }
+};
